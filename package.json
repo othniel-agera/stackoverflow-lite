@@ -4,7 +4,9 @@
   "description": "An API service for a lite version of stackoverflow",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --watch -r"
+    "run": "nodemon server.js",
+    "start": "server.js",
+    "test": "mocha --watch --recursive "
   },
   "repository": {
     "type": "git",
@@ -36,6 +38,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
+    "prettier": "^2.7.1",
     "supertest": "^6.2.4"
   }
 }
