@@ -1,0 +1,41 @@
+{
+  "name": "stackoverflow-lite",
+  "version": "1.0.0",
+  "description": "An API service for a lite version of stackoverflow",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha --watch -r"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/othniel-agera/stackoverflow-lite.git"
+  },
+  "keywords": [
+    "API",
+    "stackoverflow",
+    "clone"
+  ],
+  "author": "Othniel Agera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/othniel-agera/stackoverflow-lite/issues"
+  },
+  "homepage": "https://github.com/othniel-agera/stackoverflow-lite#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^10.0.0",
+    "mysql2": "^2.3.3",
+    "sequelize": "^6.21.6"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "eslint": "^8.23.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "supertest": "^6.2.4"
+  }
+}
