@@ -1,6 +1,6 @@
 module.exports = (sequelize, Datatype) => {
-  const Question = sequelize.define(
-    'questions',
+  const Answer = sequelize.define(
+    'answers',
     {
       question_text: {
         type: Datatype.TEXT,
@@ -14,12 +14,16 @@ module.exports = (sequelize, Datatype) => {
       logging: false,
     },
   );
-  Question.associate = (models) => {
-    Question.belongsTo(models.users, {
+  Answer.associate = (models) => {
+    Answer.belongsTo(models.users, {
       foreignKey: 'user_id',
       as: 'user',
     });
+    Answer.belongsTo(models.questions, {
+      foreignKey: 'question_id',
+      as: 'question',
+    });
   };
 
-  return Question;
+  return Answer;
 };
