@@ -1,9 +1,9 @@
 const express = require('express');
 
 const router = express.Router();
-const createUserController = require('../controllers/user.controller');
+const uaerRoute = require('./user.route');
 
-router.post('/users', createUserController);
+router.use('/auth', uaerRoute);
 
 router.get('/', (req, res) => {
   res.status(200).send({
