@@ -3,9 +3,11 @@ const express = require('express');
 const router = express.Router();
 const userRoute = require('./user.route');
 const questionRoute = require('./question.route');
+const answerRoute = require('./answer.route');
 
 router.use('/auth', userRoute);
 router.use('/questions', questionRoute);
+router.use('/answers', answerRoute);
 
 router.get('/', (req, res) => {
   res.status(200).send({
