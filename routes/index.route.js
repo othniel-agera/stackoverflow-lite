@@ -1,9 +1,11 @@
 const express = require('express');
 
 const router = express.Router();
-const uaerRoute = require('./user.route');
+const userRoute = require('./user.route');
+const questionRoute = require('./question.route');
 
-router.use('/auth', uaerRoute);
+router.use('/auth', userRoute);
+router.use('/questions', questionRoute);
 
 router.get('/', (req, res) => {
   res.status(200).send({
