@@ -1,5 +1,5 @@
 const utility = require('../lib/utility.lib');
-const { createQuestion } = require('../lib/question.lib');
+const { createQuestion, destroyQuestion } = require('../lib/question.lib');
 
 const {
   filterValues, formatValues,
@@ -27,4 +27,16 @@ const postQuestion = async (req, res) => {
   }
 };
 
-module.exports = { postQuestion };
+const deleteQuestion = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await destroyQuestion(id);
+    return res.status(200).send({
+      message: 'Successfully deleted question',
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
+module.exports = { postQuestion, deleteQuestion };
