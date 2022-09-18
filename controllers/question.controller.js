@@ -21,7 +21,7 @@ const postQuestion = async (req, res) => {
         message: 'Successfully posted question',
       });
     }
-    return res.status(401).send({ message: 'Incorrect email or password' });
+    return res.status(401).send({ message: 'Something went wrong' });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
   }
