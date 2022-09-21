@@ -7,14 +7,16 @@ const {
 
 const postAnswer = async (req, res) => {
   try {
-    const rawData = req.body;
+    const { user_id, params, body } = req;
+    const { id: question_id } = params;
+    const rawData = body;
     const filteredValues = filterValues(rawData, ['answer_text']);
     const data = formatValues(filteredValues);
 
     const answer = await createAnswer({
       answer_text: data.answer_text,
-      user_id: 1,
-      question_id: 1,
+      user_id,
+      question_id,
     });
 
     if (answer) {
