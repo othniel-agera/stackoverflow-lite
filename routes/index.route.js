@@ -7,7 +7,7 @@ const answerRoute = require('./answer.route');
 
 router.use('/auth', userRoute);
 router.use('/questions', questionRoute);
-router.use('/answers', answerRoute);
+router.use('/questions/:id/answers', answerRoute);
 
 router.get('/', (req, res) => {
   res.status(200).send({
