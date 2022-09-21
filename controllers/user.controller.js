@@ -1,5 +1,5 @@
 const utility = require('../lib/utility.lib');
-const { getUser, createUser, deleteUser } = require('../lib/user.lib');
+const { fetchUser, createUser, destroyUser } = require('../lib/user.lib');
 
 const {
   filterValues, formatValues, hashPassword, createAuthToken, comparePasswords,
@@ -17,12 +17,12 @@ const signup = async (req, res) => {
       ...formattedValues,
       password: encryptedPassword,
     };
-    const existingEmail = await getUser({
+    const existingEmail = await fetchUser({
       email: data.email,
     });
     if (existingEmail) return res.json({ Error: 'Email already taken' });
 
-    const existingUsername = await getUser({
+    const existingUsername = await fetchUser({
       username: data.username,
     });
     if (existingUsername) return res.json({ Error: 'Username already taken' });
@@ -36,7 +36,7 @@ const signup = async (req, res) => {
       refreshToken,
     });
   } catch (error) {
-    if (user && user.id) await deleteUser(user.id);
+    if (user && user.id) await destroyUser(user.id, true);
     return res.status(500).send({ error: error.message || error });
   }
 };
@@ -51,7 +51,7 @@ const login = async (req, res) => {
       ...formattedValues,
       password,
     };
-    const user = await getUser({
+    const user = await fetchUser({
       email: data.email,
     });
     if (!user) {

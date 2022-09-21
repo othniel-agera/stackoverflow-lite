@@ -49,12 +49,10 @@ const postQuestion = async (req, res) => {
       user_id,
     });
 
-    if (question) {
-      return res.status(200).send({
-        message: 'Successfully posted question',
-      });
-    }
-    return res.status(401).send({ message: 'Something went wrong' });
+    return res.status(200).send({
+      message: 'Successfully posted question',
+      question,
+    });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
   }

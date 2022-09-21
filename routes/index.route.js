@@ -4,6 +4,13 @@ const router = express.Router();
 const userRoute = require('./user.route');
 const questionRoute = require('./question.route');
 
+// eslint-disable-next-line no-unused-vars
+router.use((err, req, res, _next) => {
+  res.status(500).json({
+    message: 'An error occurred while processing your request',
+  });
+});
+
 router.use('/auth', userRoute);
 router.use('/questions', questionRoute);
 
