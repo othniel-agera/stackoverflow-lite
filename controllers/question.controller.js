@@ -28,13 +28,10 @@ const getQuestions = async (req, res) => {
   try {
     const questions = await fetchQuestions(true);
 
-    if (questions) {
-      return res.status(200).send({
-        message: 'Successfully got questions',
-        questions,
-      });
-    }
-    return res.status(404).send({ message: 'No question in DB' });
+    return res.status(200).send({
+      message: 'Successfully got questions',
+      questions,
+    });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
   }

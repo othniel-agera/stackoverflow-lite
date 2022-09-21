@@ -2,7 +2,7 @@ const utility = require('../lib/utility.lib');
 const { getUser, createUser, deleteUser } = require('../lib/user.lib');
 
 const {
-  filterValues, formatValues, encryptPassword, createAuthToken, comparePasswords,
+  filterValues, formatValues, hashPassword, createAuthToken, comparePasswords,
 } = utility;
 
 const signup = async (req, res) => {
@@ -10,7 +10,7 @@ const signup = async (req, res) => {
   try {
     const rawData = req.body;
     const { password } = rawData;
-    const encryptedPassword = await encryptPassword(password);
+    const encryptedPassword = await hashPassword(password);
     const filteredValues = filterValues(rawData, ['email', 'username', 'password', 'firstname', 'lastname']);
     const formattedValues = formatValues(filteredValues);
     const data = {
@@ -45,7 +45,7 @@ const login = async (req, res) => {
   try {
     const rawData = req.body;
     const { password } = rawData;
-    const filteredValues = filterValues(rawData, ['email', 'username', 'password', 'firstname', 'lastname']);
+    const filteredValues = filterValues(rawData, ['email', 'password']);
     const formattedValues = formatValues(filteredValues);
     const data = {
       ...formattedValues,

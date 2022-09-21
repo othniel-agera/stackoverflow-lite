@@ -2,7 +2,7 @@ const { verify } = require('jsonwebtoken');
 
 const authenticate = (req, res, next) => {
   let token = req.headers.authorization;
-  if (token.startsWith('Bearer ')) {
+  if (token && token.startsWith('Bearer ')) {
     [, token] = token.split(' ');
   }
   if (token) {
