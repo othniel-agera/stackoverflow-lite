@@ -12,7 +12,6 @@ const getQuestion = async (req, res) => {
     const { id } = req.params;
 
     const question = await fetchQuestion({ id }, true);
-    console.log(id);
     if (question) {
       return res.status(200).send({
         message: 'Successfully got question',
@@ -43,13 +42,14 @@ const getQuestions = async (req, res) => {
 
 const postQuestion = async (req, res) => {
   try {
-    const rawData = req.body;
+    const { body, user_id } = req;
+    const rawData = body;
     const filteredValues = filterValues(rawData, ['question_text']);
     const data = formatValues(filteredValues);
 
     const question = await createQuestion({
       question_text: data.question_text,
-      user_id: 1,
+      user_id,
     });
 
     if (question) {

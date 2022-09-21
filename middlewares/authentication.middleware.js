@@ -8,7 +8,7 @@ const authenticate = (req, res, next) => {
   if (token) {
     try {
       const decodedToken = verify(token, process.env.SESSION_SECRET);
-      req.userId = decodedToken.userId;
+      req.user_id = decodedToken.user_id;
       return next();
     } catch (error) {
       return res.status(401).send({ message: 'Unauthorized request, please provide a valid token.' });
