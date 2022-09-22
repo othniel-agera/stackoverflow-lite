@@ -23,6 +23,7 @@
         "camelcase": "off",
         "no-unused-vars": "warn",
         "eol-last": "warn",
-        "object-curly-newline": "warn"
+        "object-curly-newline": "warn",
+        "max-len": "warn"
     }
 }
