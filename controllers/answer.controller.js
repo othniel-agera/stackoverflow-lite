@@ -70,6 +70,34 @@ const postAnswer = async (req, res) => {
   }
 };
 
+const selectPreferedAnswer = async (req, res) => {
+  try {
+    const { user_id, params } = req;
+    const { question_id, id } = params;
+
+    const answer = await fetchAnswer({ user_id, question_id, id });
+    if (answer) {
+      const prefferedAnswer = await fetchAnswer({ is_preffered: true });
+      if (prefferedAnswer && prefferedAnswer.id !== answer.id) {
+        prefferedAnswer.is_preffered = false;
+        prefferedAnswer.save();
+      }
+      answer.is_preffered = true;
+      answer.save();
+      console.log(prefferedAnswer);
+      return res.status(200).send({
+        message: 'Successfully posted answer',
+        answer,
+      });
+    }
+    return res.status(200).send({
+      message: 'Sorry no matching answer',
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
 const deleteAnswer = async (req, res) => {
   try {
     const { id } = req.params;
@@ -83,5 +111,5 @@ const deleteAnswer = async (req, res) => {
 };
 
 module.exports = {
-  postAnswer, deleteAnswer, getAnswer, getAnswers, getAllAnswers,
+  postAnswer, deleteAnswer, getAnswer, getAnswers, getAllAnswers, selectPreferedAnswer,
 };
