@@ -2,9 +2,14 @@ module.exports = (sequelize, Datatype) => {
   const Answer = sequelize.define(
     'answers',
     {
-      question_text: {
+      answer_text: {
         type: Datatype.TEXT,
         allowNull: false,
+      },
+      is_preffered: {
+        type: Datatype.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
     },
     {
