@@ -2,6 +2,7 @@ const utility = require('../lib/utility.lib');
 const {
   createQuestion, destroyQuestion, fetchQuestion, fetchQuestions,
 } = require('../lib/question.lib');
+const { voteOnQuestion, fetchNumVotesOnQuestion } = require('../lib/vote.lib');
 
 const {
   filterValues, formatValues,
@@ -84,6 +85,55 @@ const putQuestion = async (req, res) => {
   }
 };
 
+const getVotesOnQuestion = async (req, res) => {
+  try {
+    const { user_id, params } = req;
+    const { id } = params;
+
+    const question = await fetchQuestion({ id, user_id }, true);
+    if (question) {
+      const { count: upvoteCount } = await fetchNumVotesOnQuestion(id, 'up');
+      const { count: downvoteCount } = await fetchNumVotesOnQuestion(id, 'down');
+
+      return res.status(200).send({
+        message: 'Successfully voted on a question',
+        upvotes: upvoteCount,
+        downvotes: downvoteCount,
+      });
+    }
+    return res.status(200).send({
+      message: 'Sorry no matching question',
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
+const postVoteOnQuestion = async (req, res) => {
+  try {
+    const { user_id, params, body } = req;
+    const { id } = params;
+    const rawData = body;
+    const filteredValues = filterValues(rawData, ['vote_type']);
+    const data = formatValues(filteredValues);
+
+    const question = await fetchQuestion({ id }, true);
+    if (question) {
+      const vote = await voteOnQuestion({ user_id, question_id: id, vote_type: data.vote_type });
+
+      return res.status(200).send({
+        message: 'Successfully voted on a question',
+        vote,
+      });
+    }
+    return res.status(200).send({
+      message: 'Sorry no matching question',
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
 const deleteQuestion = async (req, res) => {
   try {
     const { id } = req.params;
@@ -101,5 +151,11 @@ const deleteQuestion = async (req, res) => {
 };
 
 module.exports = {
-  getQuestion, getQuestions, postQuestion, putQuestion, deleteQuestion,
+  getQuestion,
+  getQuestions,
+  postQuestion,
+  putQuestion,
+  deleteQuestion,
+  getVotesOnQuestion,
+  postVoteOnQuestion,
 };
