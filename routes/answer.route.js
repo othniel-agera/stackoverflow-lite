@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const {
-  postAnswer, deleteAnswer, getAnswer, getAnswers, getAllAnswers, selectPreferedAnswer,
+  postAnswer, deleteAnswer, getAnswer, getAnswers, getAllAnswers, putAnswer, selectPreferedAnswer,
 } = require('../controllers/answer.controller');
 const authenticate = require('../middlewares/authentication.middleware');
 
@@ -10,7 +10,8 @@ router.get('/all', authenticate, getAllAnswers);
 router.get('/:id', authenticate, getAnswer);
 router.get('/', authenticate, getAnswers);
 router.post('/', authenticate, postAnswer);
-router.put('/:id', authenticate, selectPreferedAnswer);
+router.put('/:id', authenticate, putAnswer);
+router.put('/', authenticate, selectPreferedAnswer);
 router.delete('/:id', authenticate, deleteAnswer);
 
 module.exports = router;

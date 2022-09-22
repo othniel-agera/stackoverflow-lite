@@ -70,10 +70,41 @@ const postAnswer = async (req, res) => {
   }
 };
 
+const putAnswer = async (req, res) => {
+  try {
+    const { user_id, params, body } = req;
+    const { question_id, id } = params;
+    const rawData = body;
+    const filteredValues = filterValues(rawData, ['answer_text', 'is_preffered']);
+    const data = formatValues(filteredValues);
+
+    const answer = await fetchAnswer({ user_id, question_id, id });
+    if (answer) {
+      answer.is_preffered = [true, false].includes(data.is_preffered)
+        ? data.is_preffered : answer.is_preffered;
+      answer.answer_text = data.answer_text ? data.answer_text : answer.answer_text;
+      answer.save();
+
+      return res.status(200).send({
+        message: 'Successfully posted answer',
+        answer,
+      });
+    }
+    return res.status(200).send({
+      message: 'Sorry no matching answer',
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
 const selectPreferedAnswer = async (req, res) => {
   try {
-    const { user_id, params } = req;
-    const { question_id, id } = params;
+    const { user_id, params, body } = req;
+    const { question_id } = params;
+    const rawData = body;
+    const filteredValues = filterValues(rawData, ['id']);
+    const { id } = formatValues(filteredValues);
 
     const answer = await fetchAnswer({ user_id, question_id, id });
     if (answer) {
@@ -111,5 +142,5 @@ const deleteAnswer = async (req, res) => {
 };
 
 module.exports = {
-  postAnswer, deleteAnswer, getAnswer, getAnswers, getAllAnswers, selectPreferedAnswer,
+  postAnswer, deleteAnswer, getAnswer, getAnswers, getAllAnswers, putAnswer, selectPreferedAnswer,
 };
