@@ -58,6 +58,32 @@ const postQuestion = async (req, res) => {
   }
 };
 
+const putQuestion = async (req, res) => {
+  try {
+    const { user_id, params, body } = req;
+    const { id } = params;
+    const rawData = body;
+    const filteredValues = filterValues(rawData, ['question_text']);
+    const data = formatValues(filteredValues);
+
+    const question = await fetchQuestion({ user_id, id });
+    if (question) {
+      question.question_text = data.question_text ? data.question_text : question.question_text;
+      question.save();
+
+      return res.status(200).send({
+        message: 'Successfully editted question',
+        question,
+      });
+    }
+    return res.status(200).send({
+      message: 'Sorry no matching question',
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
 const deleteQuestion = async (req, res) => {
   try {
     const { id } = req.params;
@@ -75,5 +101,5 @@ const deleteQuestion = async (req, res) => {
 };
 
 module.exports = {
-  getQuestion, getQuestions, postQuestion, deleteQuestion,
+  getQuestion, getQuestions, postQuestion, putQuestion, deleteQuestion,
 };
