@@ -2,6 +2,7 @@ const utility = require('../lib/utility.lib');
 const {
   createAnswer, destroyAnswer, fetchAnswer, fetchAnswers, fetchAnswersToQuestion,
 } = require('../lib/answer.lib');
+const { voteOnAnswer, fetchNumVotesOnAnswer } = require('../lib/vote.lib');
 
 const {
   filterValues, formatValues,
@@ -98,6 +99,55 @@ const putAnswer = async (req, res) => {
   }
 };
 
+const getVotesOnAnswer = async (req, res) => {
+  try {
+    const { user_id, params } = req;
+    const { id, question_id } = params;
+
+    const answer = await fetchAnswer({ id, user_id, question_id }, true);
+    if (answer) {
+      const { count: upvoteCount } = await fetchNumVotesOnAnswer(id, 'up');
+      const { count: downvoteCount } = await fetchNumVotesOnAnswer(id, 'down');
+
+      return res.status(200).send({
+        message: 'Successfully voted on a question',
+        upvotes: upvoteCount,
+        downvotes: downvoteCount,
+      });
+    }
+    return res.status(200).send({
+      message: 'Sorry no matching question',
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
+const postVoteOnAnswer = async (req, res) => {
+  try {
+    const { user_id, params, body } = req;
+    const { id } = params;
+    const rawData = body;
+    const filteredValues = filterValues(rawData, ['vote_type']);
+    const data = formatValues(filteredValues);
+
+    const question = await fetchAnswer({ id }, true);
+    if (question) {
+      const vote = await voteOnAnswer({ user_id, answer_id: id, vote_type: data.vote_type });
+
+      return res.status(200).send({
+        message: 'Successfully voted on a answer',
+        vote,
+      });
+    }
+    return res.status(200).send({
+      message: 'Sorry no matching answer',
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
 const selectPreferedAnswer = async (req, res) => {
   try {
     const { user_id, params, body } = req;
@@ -142,5 +192,13 @@ const deleteAnswer = async (req, res) => {
 };
 
 module.exports = {
-  postAnswer, deleteAnswer, getAnswer, getAnswers, getAllAnswers, putAnswer, selectPreferedAnswer,
+  postAnswer,
+  deleteAnswer,
+  getAnswer,
+  getAnswers,
+  getAllAnswers,
+  putAnswer,
+  getVotesOnAnswer,
+  postVoteOnAnswer,
+  selectPreferedAnswer,
 };
