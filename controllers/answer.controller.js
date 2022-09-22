@@ -134,7 +134,7 @@ const deleteAnswer = async (req, res) => {
     const { id } = req.params;
     await destroyAnswer(id);
     return res.status(200).send({
-      message: 'Successfully deleted answer ',
+      message: 'Successfully deleted answer',
     });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
