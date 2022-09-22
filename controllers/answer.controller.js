@@ -84,7 +84,7 @@ const selectPreferedAnswer = async (req, res) => {
       }
       answer.is_preffered = true;
       answer.save();
-      console.log(prefferedAnswer);
+
       return res.status(200).send({
         message: 'Successfully posted answer',
         answer,
