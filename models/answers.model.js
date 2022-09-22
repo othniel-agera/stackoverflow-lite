@@ -6,6 +6,11 @@ module.exports = (sequelize, Datatype) => {
         type: Datatype.TEXT,
         allowNull: false,
       },
+      is_preffered: {
+        type: Datatype.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
     },
     {
       timestamps: true,
