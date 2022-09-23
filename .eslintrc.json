@@ -27,6 +27,7 @@
         "max-len": "warn",
         "comma-dangle": "warn",
         "keyword-spacing": "warn",
-        "object-curly-spacing": "warn"
+        "object-curly-spacing": "warn",
+        "indent": "warn"
     }
 }
