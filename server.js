@@ -1,5 +1,4 @@
 const express = require('express');
-const morgan = require('morgan');
 const db = require('./models/index.model');
 const routes = require('./routes/index.route');
 
@@ -7,7 +6,6 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan('dev'));
 
 app.use(routes);
 
