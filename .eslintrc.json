@@ -28,6 +28,6 @@
         "comma-dangle": "warn",
         "keyword-spacing": "warn",
         "space-before-blocks": "warn"
-        
+        ]
     }
 }

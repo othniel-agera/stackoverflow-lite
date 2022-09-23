@@ -4,7 +4,6 @@ module.exports = (sequelize, Datatype) => {
     {
       question_text: {
         type: Datatype.TEXT,
-        allowNull: false,
       },
     },
     {
@@ -16,7 +15,7 @@ module.exports = (sequelize, Datatype) => {
   );
   Question.associate = (models) => {
     Question.belongsTo(models.users, {
-      foreignKey: 'user_id',
+      foreignKey: 'userid',
       as: 'user',
     });
   };
