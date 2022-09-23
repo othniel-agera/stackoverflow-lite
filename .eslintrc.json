@@ -26,6 +26,7 @@
         "object-curly-newline": "warn",
         "max-len": "warn",
         "comma-dangle": "warn",
-        "keyword-spacing": "warn"
+        "keyword-spacing": "warn",
+        "space-before-blocks": "warn"
     }
 }
