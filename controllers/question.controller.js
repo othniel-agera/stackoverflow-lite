@@ -73,7 +73,7 @@ const putQuestion = async (req, res) => {
       question.save();
 
       return res.status(200).send({
-        message: 'Successfully editted question',
+        message: 'Successfully edited question',
         question,
       });
     }
@@ -155,7 +155,7 @@ module.exports = {
   getQuestions,
   postQuestion,
   putQuestion,
-  deleteQuestion,
   getVotesOnQuestion,
   postVoteOnQuestion,
+  deleteQuestion,
 };

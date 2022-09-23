@@ -4,10 +4,12 @@ const router = express.Router();
 const userRoute = require('./user.route');
 const questionRoute = require('./question.route');
 const answerRoute = require('./answer.route');
+const commentRoute = require('./comment.route');
 
 router.use('/auth', userRoute);
 router.use('/questions', questionRoute);
 router.use('/questions/:question_id/answers', answerRoute);
+router.use('/questions/:question_id/comments', commentRoute);
 
 router.get('/', (req, res) => {
   res.status(200).send({
