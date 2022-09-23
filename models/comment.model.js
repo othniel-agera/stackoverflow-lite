@@ -1,8 +1,8 @@
 module.exports = (sequelize, Datatype) => {
-  const Question = sequelize.define(
-    'questions',
+  const comment = sequelize.define(
+    'comment',
     {
-      question_text: {
+      comment_text: {
         type: Datatype.TEXT,
         allowNull: false,
       },
@@ -14,12 +14,16 @@ module.exports = (sequelize, Datatype) => {
       logging: false,
     },
   );
-  Question.associate = (models) => {
-    Question.belongsTo(models.users, {
+  comment.associate = (models) => {
+    comment.belongsTo(models.users, {
       foreignKey: 'user_id',
       as: 'user',
     });
+    comment.belongsTo(models.answers, {
+      foreignKey: 'answer_id',
+      as: 'answer',
+    });
   };
 
-  return Question;
+  return comment;
 };
