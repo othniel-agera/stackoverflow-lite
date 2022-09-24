@@ -2,6 +2,7 @@ const { Router } = require('express');
 const {
   getQuestion,
   getQuestions,
+  getQuestionsBySearchQuery,
   postQuestion,
   putQuestion,
   deleteQuestion,
@@ -12,6 +13,7 @@ const authenticate = require('../middlewares/authentication.middleware');
 
 const router = Router();
 
+router.get('/search/:search_query', authenticate, getQuestionsBySearchQuery);
 router.get('/:id', authenticate, getQuestion);
 router.get('/', authenticate, getQuestions);
 router.post('/', authenticate, postQuestion);

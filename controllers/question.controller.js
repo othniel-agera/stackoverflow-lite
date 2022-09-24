@@ -1,6 +1,6 @@
 const utility = require('../lib/utility.lib');
 const {
-  createQuestion, destroyQuestion, fetchQuestion, fetchQuestions,
+  createQuestion, destroyQuestion, fetchQuestion, fetchQuestions, searchQuestions,
 } = require('../lib/question.lib');
 const { voteOnQuestion, fetchNumVotesOnQuestion } = require('../lib/vote.lib');
 
@@ -32,6 +32,28 @@ const getQuestions = async (req, res) => {
     return res.status(200).send({
       message: 'Successfully got questions',
       questions,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
+const getQuestionsBySearchQuery = async (req, res) => {
+  try {
+    const { params, query } = req;
+    const { search_query: search } = params;
+    const { page, limit } = query;
+    const {
+      rows,
+      count,
+    } = await searchQuestions(search, true, Number.parseInt(page, 10), Number.parseInt(limit, 10));
+
+    return res.status(200).send({
+      message: 'Successfully got questions',
+      questions: rows,
+      total: count,
+      page: page || 0,
+      limit: limit || 10,
     });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
@@ -153,6 +175,7 @@ const deleteQuestion = async (req, res) => {
 module.exports = {
   getQuestion,
   getQuestions,
+  getQuestionsBySearchQuery,
   postQuestion,
   putQuestion,
   deleteQuestion,
