@@ -1,6 +1,11 @@
 const utility = require('../lib/utility.lib');
 const {
-  createQuestion, destroyQuestion, fetchQuestion, fetchQuestions, searchQuestions,
+  createQuestion,
+  destroyQuestion,
+  fetchQuestion,
+  fetchQuestions,
+  searchQuestions,
+  fetchQuestionsWithMostAnswers,
 } = require('../lib/question.lib');
 const { voteOnQuestion, fetchNumVotesOnQuestion } = require('../lib/vote.lib');
 
@@ -56,6 +61,20 @@ const getQuestionsBySearchQuery = async (req, res) => {
       limit: limit || 10,
     });
   } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
+const getQuestionsWithMostAnswers = async (req, res) => {
+  try {
+    const questions = await fetchQuestionsWithMostAnswers();
+
+    return res.status(200).send({
+      message: 'Successfully got questions',
+      questions,
+    });
+  } catch (error) {
+    console.log(error);
     return res.status(500).send({ error: error.message || error });
   }
 };
@@ -176,6 +195,7 @@ module.exports = {
   getQuestion,
   getQuestions,
   getQuestionsBySearchQuery,
+  getQuestionsWithMostAnswers,
   postQuestion,
   putQuestion,
   deleteQuestion,
