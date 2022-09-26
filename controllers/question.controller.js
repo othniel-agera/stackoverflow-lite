@@ -49,7 +49,7 @@ const getQuestionsBySearchQuery = async (req, res) => {
     } = await searchQuestions(search, true, Number.parseInt(page, 10), Number.parseInt(limit, 10));
 
     return res.status(200).send({
-      message: 'Successfully got questions',
+      message: 'Successfully got questions.',
       questions: rows,
       total: count,
       page: page || 0,
