@@ -11,7 +11,7 @@ app.use(morgan('dev'));
 
 app.use(routes);
 
-const PORT = process.env.PORT || 4040;
+const PORT = process.env.NODE_ENV === 'test' ? 2345 : process.env.PORT || 4040;
 
 db.sequelize.sync().then(() => {
   console.log('Database Synced');
@@ -22,3 +22,5 @@ db.sequelize.sync().then(() => {
 app.listen(PORT, () => {
   console.log(`Server started on port #${PORT}`);
 });
+
+module.exports = { app };
