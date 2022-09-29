@@ -1,7 +1,8 @@
-# stackoverflow-lite
-An API service for a lite version of stackoverflow
 # Project: Stackoverflow-lite
 
+An API service for a lite version of stackoverflow
+
+View on [postman](https://www.getpostman.com/collections/0b502b0fd9bc8a79240b)
 ## End-point: Signup
 ### Method: POST
 >```
