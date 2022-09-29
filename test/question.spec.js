@@ -115,7 +115,6 @@ describe('Question Test', () => {
 
   describe('Negative Tests', () => {
     let token;
-    let question_id;
     const user = {
       username: 'kufre',
       firstname: 'Kufre',
