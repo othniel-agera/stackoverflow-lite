@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "server.js",
-    "test": "mocha --watch --recursive "
+    "test": "NODE_ENV=test mocha --watch --recursive"
   },
   "repository": {
     "type": "git",
