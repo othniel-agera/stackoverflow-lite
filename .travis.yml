@@ -2,8 +2,8 @@ sude: false
 
 language: node_js
 
-node_js: 
-  - node
+node_js:
+  - 17
 
 install: 
   - npm ci
