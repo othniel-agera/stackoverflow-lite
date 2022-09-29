@@ -69,7 +69,7 @@ describe('User Registration Test', () => {
     };
     before(async () => {
       const password = await hashPassword('test123');
-      await createUser({ ...user, password }).id;
+      await createUser({ ...user, password });
     });
     it('should not register user successfully when an email is reuse', async () => {
       const response = await request(app)
