@@ -86,7 +86,7 @@ const postQuestion = async (req, res) => {
     const rawData = body;
     const filteredValues = filterValues(rawData, ['question_text']);
     const data = formatValues(filteredValues);
-
+    if (!data.question_text) return res.status(400).json({ message: 'Question text is required' });
     const question = await createQuestion({
       question_text: data.question_text,
       user_id,

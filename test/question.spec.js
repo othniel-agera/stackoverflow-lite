@@ -125,13 +125,13 @@ describe('Question Test', () => {
         .send({
           question_text: '',
         })
-        .expect(500);
+        .expect(400);
 
       const resp_data = response.body;
       expect(resp_data).to.be.an('object');
-      expect(resp_data).to.have.property('error');
-      expect(resp_data.error).to.be.an('string');
-      expect(resp_data.error).to.equal('notNull Violation: questions.question_text cannot be null');
+      expect(resp_data).to.have.property('message');
+      expect(resp_data.message).to.be.an('string');
+      expect(resp_data.message).to.equal('Question text is required');
     });
     it('Should not edit the question', async () => {
       const response = await putRequest('/questions/0', token)
