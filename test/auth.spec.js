@@ -22,7 +22,9 @@ describe('User Registration Test', () => {
       expect(resp_data).to.have.property('accessToken');
       expect(resp_data).to.have.property('refreshToken');
       expect(resp_data.accessToken).to.be.an('string');
+      expect(resp_data.accessToken).to.not.equal('');
       expect(resp_data.refreshToken).to.be.an('string');
+      expect(resp_data.refreshToken).to.not.equal('');
     });
     it('should login user successfully', async () => {
       const email = `${Date.now()}_example@example.com`;
