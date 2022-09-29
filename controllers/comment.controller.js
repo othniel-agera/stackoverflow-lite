@@ -37,6 +37,7 @@ const postCommentOnQuestion = async (req, res) => {
     const filteredValues = filterValues(rawData, ['comment_text']);
     const data = formatValues(filteredValues);
 
+    if (!data.comment_text) return res.status(400).json({ message: 'Comment text is required' });
     const comment = await commentOnQuestion({
       comment_text: data.comment_text,
       user_id,
@@ -48,6 +49,7 @@ const postCommentOnQuestion = async (req, res) => {
       comment,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).send({ error: error.message || error });
   }
 };
@@ -63,7 +65,7 @@ const putCommentOnQuestion = async (req, res) => {
       user_id, id, comment_text: data.comment_text,
     });
     return res.status(200).send({
-      message: 'Successfully edited question',
+      message: 'Successfully edited comment',
       comment,
     });
   } catch (error) {
@@ -109,6 +111,7 @@ const postCommentOnAnswer = async (req, res) => {
     const filteredValues = filterValues(rawData, ['comment_text']);
     const data = formatValues(filteredValues);
 
+    if (!data.comment_text) return res.status(400).json({ message: 'Comment text is required' });
     const comment = await commentOnAnswer({
       comment_text: data.comment_text,
       user_id,
@@ -135,7 +138,7 @@ const putCommentOnAnswer = async (req, res) => {
       user_id, id, comment_text: data.comment_text,
     });
     return res.status(200).send({
-      message: 'Successfully edited answer',
+      message: 'Successfully edited comment',
       comment,
     });
   } catch (error) {
