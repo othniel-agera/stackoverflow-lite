@@ -3,7 +3,6 @@ const {
   createAnswer, destroyAnswer, fetchAnswer, fetchAnswers, fetchAnswersToQuestion,
 } = require('../lib/answer.lib');
 const { voteOnAnswer, fetchNumVotesOnAnswer } = require('../lib/vote.lib');
-const { fetchQuestion } = require('../lib/question.lib');
 
 const {
   filterValues, formatValues,
@@ -57,6 +56,7 @@ const postAnswer = async (req, res) => {
     const rawData = body;
     const filteredValues = filterValues(rawData, ['answer_text']);
     const data = formatValues(filteredValues);
+    if (!data.answer_text) return res.status(400).json({ message: 'Answer text is required' });
     const answer = await createAnswer({
       answer_text: data.answer_text,
       user_id,
@@ -84,11 +84,11 @@ const putAnswer = async (req, res) => {
     if (answer) {
       answer.is_preffered = [true, false].includes(data.is_preffered)
         ? data.is_preffered : answer.is_preffered;
-      answer.answer_text = data.answer_text || answer.answer_text;
+      answer.answer_text = data.answer_text ? data.answer_text : answer.answer_text;
       answer.save();
 
       return res.status(200).send({
-        message: 'Successfully posted answer',
+        message: 'Successfully edited answer',
         answer,
       });
     }
@@ -102,24 +102,21 @@ const putAnswer = async (req, res) => {
 
 const getVotesOnAnswer = async (req, res) => {
   try {
-    const { user_id, params } = req;
-    const { id, question_id } = params;
-
-    const answer = await fetchAnswer({ id, user_id, question_id }, true);
+    const { params } = req;
+    const { id } = params;
+    const answer = await fetchAnswer({ id }, true);
     if (answer) {
-      const [upresponse, downresponse] = await Promise.all([fetchNumVotesOnAnswer(id, 'up'), fetchNumVotesOnAnswer(id, 'down')]);
-
-      const { count: upvoteCount } = upresponse;
-      const { count: downvoteCount } = downresponse;
+      const { count: upvoteCount } = await fetchNumVotesOnAnswer(id, 'up');
+      const { count: downvoteCount } = await fetchNumVotesOnAnswer(id, 'down');
 
       return res.status(200).send({
-        message: 'Successfully voted on a question',
+        message: 'Successfully fetched answer',
         upvotes: upvoteCount,
         downvotes: downvoteCount,
       });
     }
-    return res.status(200).send({
-      message: 'Sorry no matching question',
+    return res.status(404).send({
+      message: 'Sorry no matching answer',
     });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
@@ -143,7 +140,7 @@ const postVoteOnAnswer = async (req, res) => {
         vote,
       });
     }
-    return res.status(200).send({
+    return res.status(404).send({
       message: 'Sorry no matching answer',
     });
   } catch (error) {
@@ -159,29 +156,23 @@ const selectPreferedAnswer = async (req, res) => {
     const filteredValues = filterValues(rawData, ['id']);
     const { id } = formatValues(filteredValues);
 
-    const question = await fetchQuestion({ user_id, id: question_id }, true);
-    const answer = await fetchAnswer({ question_id, id });
-    if (question.user_id === user_id) {
-      if (answer) {
-        const prefferedAnswer = await fetchAnswer({ is_preffered: true, question_id });
-        if (prefferedAnswer && prefferedAnswer.id !== answer.id) {
-          prefferedAnswer.is_preffered = false;
-          prefferedAnswer.save();
-        }
-        answer.is_preffered = true;
-        answer.save();
-
-        return res.status(200).send({
-          message: 'Successfully posted answer',
-          answer,
-        });
+    const answer = await fetchAnswer({ user_id, question_id, id });
+    if (answer) {
+      const prefferedAnswer = await fetchAnswer({ is_preffered: true });
+      if (prefferedAnswer && prefferedAnswer.id !== answer.id) {
+        prefferedAnswer.is_preffered = false;
+        prefferedAnswer.save();
       }
+      answer.is_preffered = true;
+      answer.save();
+
       return res.status(200).send({
-        message: 'Sorry no matching answer',
+        message: 'Successfully posted answer',
+        answer,
       });
     }
     return res.status(200).send({
-      message: 'Sorry you do not have authorization for this',
+      message: 'Sorry no matching answer',
     });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
@@ -190,12 +181,16 @@ const selectPreferedAnswer = async (req, res) => {
 
 const deleteAnswer = async (req, res) => {
   try {
-    const { user_id, params } = req;
+    const { params, user_id } = req;
     const { id } = params;
-    await destroyAnswer(id, user_id);
-    return res.status(200).send({
-      message: 'Successfully deleted answer',
-    });
+    const deleted = await destroyAnswer(id, user_id);
+
+    if (deleted) {
+      return res.status(200).send({
+        message: 'Successfully deleted answer',
+      });
+    }
+    return res.status(404).send({ message: 'No answer with such ID' });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
   }

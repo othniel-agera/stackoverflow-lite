@@ -1,6 +1,11 @@
 const utility = require('../lib/utility.lib');
 const {
-  createQuestion, destroyQuestion, fetchQuestion, fetchQuestions,
+  createQuestion,
+  destroyQuestion,
+  fetchQuestion,
+  fetchQuestions,
+  searchQuestions,
+  fetchQuestionsWithMostAnswers,
 } = require('../lib/question.lib');
 const { voteOnQuestion, fetchNumVotesOnQuestion } = require('../lib/vote.lib');
 
@@ -38,13 +43,50 @@ const getQuestions = async (req, res) => {
   }
 };
 
+const getQuestionsBySearchQuery = async (req, res) => {
+  try {
+    const { params, query } = req;
+    const { search_query: search } = params;
+    const page = Number.parseInt(query.page, 10);
+    const limit = Number.parseInt(query.limit, 10);
+    const {
+      rows,
+      count,
+    } = await searchQuestions(search, true, page, limit);
+
+    return res.status(200).send({
+      message: 'Successfully got questions.',
+      questions: rows,
+      total: count,
+      page: page || 0,
+      limit: limit || 10,
+    });
+  } catch (error) {
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
+const getQuestionsWithMostAnswers = async (req, res) => {
+  try {
+    const questions = await fetchQuestionsWithMostAnswers();
+
+    return res.status(200).send({
+      message: 'Successfully got questions',
+      questions,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ error: error.message || error });
+  }
+};
+
 const postQuestion = async (req, res) => {
   try {
     const { body, user_id } = req;
     const rawData = body;
     const filteredValues = filterValues(rawData, ['question_text']);
     const data = formatValues(filteredValues);
-
+    if (!data.question_text) return res.status(400).json({ message: 'Question text is required' });
     const question = await createQuestion({
       question_text: data.question_text,
       user_id,
@@ -69,11 +111,11 @@ const putQuestion = async (req, res) => {
 
     const question = await fetchQuestion({ user_id, id });
     if (question) {
-      question.question_text = data.question_text || question.question_text;
+      question.question_text = data.question_text ? data.question_text : question.question_text;
       question.save();
 
       return res.status(200).send({
-        message: 'Successfully editted question',
+        message: 'Successfully edited question',
         question,
       });
     }
@@ -92,18 +134,16 @@ const getVotesOnQuestion = async (req, res) => {
 
     const question = await fetchQuestion({ id, user_id }, true);
     if (question) {
-      const [upresponse, downresponse] = await Promise.all([fetchNumVotesOnQuestion(id, 'up'), fetchNumVotesOnQuestion(id, 'down')]);
-
-      const { count: upvoteCount } = upresponse;
-      const { count: downvoteCount } = downresponse;
+      const { count: upvoteCount } = await fetchNumVotesOnQuestion(id, 'up');
+      const { count: downvoteCount } = await fetchNumVotesOnQuestion(id, 'down');
 
       return res.status(200).send({
-        message: 'Successfully voted on a question',
+        message: 'Successfully fetched question',
         upvotes: upvoteCount,
         downvotes: downvoteCount,
       });
     }
-    return res.status(200).send({
+    return res.status(404).send({
       message: 'Sorry no matching question',
     });
   } catch (error) {
@@ -128,7 +168,7 @@ const postVoteOnQuestion = async (req, res) => {
         vote,
       });
     }
-    return res.status(200).send({
+    return res.status(404).send({
       message: 'Sorry no matching question',
     });
   } catch (error) {
@@ -138,13 +178,16 @@ const postVoteOnQuestion = async (req, res) => {
 
 const deleteQuestion = async (req, res) => {
   try {
-    const { user_id, params } = req;
+    const { params, user_id } = req;
     const { id } = params;
-    await destroyQuestion(id, user_id);
+    const deleted = await destroyQuestion(id, user_id);
 
-    return res.status(200).send({
-      message: 'Successfully deleted question',
-    });
+    if (deleted) {
+      return res.status(200).send({
+        message: 'Successfully deleted question',
+      });
+    }
+    return res.status(404).send({ message: 'No question with such ID' });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
   }
@@ -153,9 +196,11 @@ const deleteQuestion = async (req, res) => {
 module.exports = {
   getQuestion,
   getQuestions,
+  getQuestionsBySearchQuery,
+  getQuestionsWithMostAnswers,
   postQuestion,
   putQuestion,
-  deleteQuestion,
   getVotesOnQuestion,
   postVoteOnQuestion,
+  deleteQuestion,
 };

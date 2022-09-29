@@ -1,6 +1,6 @@
 module.exports = (sequelize, Datatype) => {
-  const comment = sequelize.define(
-    'comment',
+  const AnswerComments = sequelize.define(
+    'answer_comments',
     {
       comment_text: {
         type: Datatype.TEXT,
@@ -14,16 +14,16 @@ module.exports = (sequelize, Datatype) => {
       logging: false,
     },
   );
-  comment.associate = (models) => {
-    comment.belongsTo(models.users, {
+  AnswerComments.associate = (models) => {
+    AnswerComments.belongsTo(models.users, {
       foreignKey: 'user_id',
       as: 'user',
     });
-    comment.belongsTo(models.answers, {
+    AnswerComments.belongsTo(models.answers, {
       foreignKey: 'answer_id',
       as: 'answer',
     });
   };
 
-  return comment;
+  return AnswerComments;
 };

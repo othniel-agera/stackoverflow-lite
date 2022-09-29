@@ -1,14 +1,31 @@
-// import mongoose from "mongoose";
-import request from 'supertest';
-import url from 'url';
-import { expect } from 'chai';
-import { app } from '../../server';
+const request = require('supertest');
+const url = require('url');
+const { expect } = require('chai');
+const { app } = require('../server');
 
-export {
-  expect, app, url, request,
+const getRequest = (route, token) => request(app)
+  .get(`/api/v1${route}`)
+  .set('Authorization', token)
+  .set('Accept', 'application/json');
+const postRequest = (route, token) => request(app)
+  .post(`/api/v1${route}`)
+  .set('Authorization', token)
+  .set('Accept', 'application/json');
+const putRequest = (route, token) => request(app)
+  .put(`/api/v1${route}`)
+  .set('Authorization', token)
+  .set('Accept', 'application/json');
+const deleteRequest = (route, token) => request(app)
+  .delete(`/api/v1${route}`)
+  .set('Authorization', token)
+  .set('Accept', 'application/json');
+module.exports = {
+  expect,
+  app,
+  url,
+  request,
+  getRequest,
+  postRequest,
+  putRequest,
+  deleteRequest,
 };
-
-// export const UserModel = mongoose.model < User > "User";
-// export const ProductModel = base < Product > "product";
-// export const OrderModel = mongoose.model < Order > "Order";
-// export const CartModel = mongoose.model < Cart > "Cart";

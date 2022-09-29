@@ -2,6 +2,8 @@ const { Router } = require('express');
 const {
   getQuestion,
   getQuestions,
+  getQuestionsBySearchQuery,
+  getQuestionsWithMostAnswers,
   postQuestion,
   putQuestion,
   deleteQuestion,
@@ -11,6 +13,9 @@ const {
 const authenticate = require('../middlewares/authentication.middleware');
 
 const router = Router();
+
+router.get('/search/:search_query', authenticate, getQuestionsBySearchQuery);
+router.get('/most-answers', authenticate, getQuestionsWithMostAnswers);
 
 router.get('/:id', authenticate, getQuestion);
 router.get('/', authenticate, getQuestions);

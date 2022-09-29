@@ -15,9 +15,11 @@ module.exports = {
     database: process.env.TEST_DATABASE,
     host: process.env.DB_HOST,
     dialect: 'mysql',
+    logging: false,
   },
   production: {
     url: process.env.DATABASE_URL,
     dialect: 'mysql',
+    logging: false,
   },
 };
