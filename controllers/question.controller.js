@@ -138,12 +138,12 @@ const getVotesOnQuestion = async (req, res) => {
       const { count: downvoteCount } = await fetchNumVotesOnQuestion(id, 'down');
 
       return res.status(200).send({
-        message: 'Successfully voted on a question',
+        message: 'Successfully fetched question',
         upvotes: upvoteCount,
         downvotes: downvoteCount,
       });
     }
-    return res.status(200).send({
+    return res.status(404).send({
       message: 'Sorry no matching question',
     });
   } catch (error) {
@@ -168,7 +168,7 @@ const postVoteOnQuestion = async (req, res) => {
         vote,
       });
     }
-    return res.status(200).send({
+    return res.status(404).send({
       message: 'Sorry no matching question',
     });
   } catch (error) {

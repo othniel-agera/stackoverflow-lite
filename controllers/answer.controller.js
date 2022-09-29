@@ -102,22 +102,21 @@ const putAnswer = async (req, res) => {
 
 const getVotesOnAnswer = async (req, res) => {
   try {
-    const { user_id, params } = req;
-    const { id, question_id } = params;
-
-    const answer = await fetchAnswer({ id, user_id, question_id }, true);
+    const { params } = req;
+    const { id } = params;
+    const answer = await fetchAnswer({ id }, true);
     if (answer) {
       const { count: upvoteCount } = await fetchNumVotesOnAnswer(id, 'up');
       const { count: downvoteCount } = await fetchNumVotesOnAnswer(id, 'down');
 
       return res.status(200).send({
-        message: 'Successfully voted on a question',
+        message: 'Successfully fetched answer',
         upvotes: upvoteCount,
         downvotes: downvoteCount,
       });
     }
-    return res.status(200).send({
-      message: 'Sorry no matching question',
+    return res.status(404).send({
+      message: 'Sorry no matching answer',
     });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
@@ -141,7 +140,7 @@ const postVoteOnAnswer = async (req, res) => {
         vote,
       });
     }
-    return res.status(200).send({
+    return res.status(404).send({
       message: 'Sorry no matching answer',
     });
   } catch (error) {
