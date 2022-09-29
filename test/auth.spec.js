@@ -6,7 +6,7 @@ describe('User Registration Test', () => {
   describe('Positive Tests', () => {
     it('should register user successfully', async () => {
       const response = await request(app)
-        .post('/auth/signup')
+        .post('/api/v1/auth/signup')
         .send({
           username: `${Date.now()}_ox`,
           firstname: 'leo',
@@ -29,7 +29,7 @@ describe('User Registration Test', () => {
     it('should login user successfully', async () => {
       const email = `${Date.now()}_example@example.com`;
       await request(app)
-        .post('/auth/signup')
+        .post('/api/v1/auth/signup')
         .send({
           username: `${Date.now()}_ox`,
           firstname: 'leo',
@@ -40,7 +40,7 @@ describe('User Registration Test', () => {
         .set('Accept', 'application/json')
         .expect(201);
       const response = await request(app)
-        .post('/auth/login')
+        .post('/api/v1/auth/login')
         .send({
           email,
           password: 'test123',
@@ -73,7 +73,7 @@ describe('User Registration Test', () => {
     });
     it('should not register user successfully when an email is reuse', async () => {
       const response = await request(app)
-        .post('/auth/signup')
+        .post('/api/v1/auth/signup')
         .send(user)
         .set('Accept', 'application/json')
         .expect(200);
@@ -86,7 +86,7 @@ describe('User Registration Test', () => {
     });
     it('should not register user successfully when an username is reuse', async () => {
       const response = await request(app)
-        .post('/auth/signup')
+        .post('/api/v1/auth/signup')
         .send({ ...user, email: 'kufre@email.com' })
         .set('Accept', 'application/json')
         .expect(200);
@@ -100,7 +100,7 @@ describe('User Registration Test', () => {
     it('should not login user successfully because of incorrect email', async () => {
       const password = await hashPassword('test123');
       const response = await request(app)
-        .post('/auth/login')
+        .post('/api/v1/auth/login')
         .send({ ...user, password })
         .set('Accept', 'application/json')
         .expect(401);
@@ -111,7 +111,7 @@ describe('User Registration Test', () => {
     });
     it('should not login user successfully because of incorrect password', async () => {
       const response = await request(app)
-        .post('/auth/login')
+        .post('/api/v1/auth/login')
         .send({ ...user, password: 'kufre@email.com' })
         .set('Accept', 'application/json')
         .expect(401);

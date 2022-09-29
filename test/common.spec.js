@@ -4,19 +4,19 @@ const { expect } = require('chai');
 const { app } = require('../server');
 
 const getRequest = (route, token) => request(app)
-  .get(route)
+  .get(`/api/v1${route}`)
   .set('Authorization', token)
   .set('Accept', 'application/json');
 const postRequest = (route, token) => request(app)
-  .post(route)
+  .post(`/api/v1${route}`)
   .set('Authorization', token)
   .set('Accept', 'application/json');
 const putRequest = (route, token) => request(app)
-  .put(route)
+  .put(`/api/v1${route}`)
   .set('Authorization', token)
   .set('Accept', 'application/json');
 const deleteRequest = (route, token) => request(app)
-  .delete(route)
+  .delete(`/api/v1${route}`)
   .set('Authorization', token)
   .set('Accept', 'application/json');
 module.exports = {

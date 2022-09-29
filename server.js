@@ -9,7 +9,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.use(routes);
+app.set('base', '/api/v1');
+app.use('/api/v1', routes);
 
 const PORT = process.env.NODE_ENV === 'test' ? 2345 : process.env.PORT || 4040;
 

@@ -28,7 +28,7 @@ describe('Answer Test', () => {
       const password = await hashPassword('test123');
       const newUser = await createUser({ ...user, password });
       const response = await request(app)
-        .post('/auth/login')
+        .post('/api/v1/auth/login')
         .send(user)
         .set('Accept', 'application/json');
       token = response.body.accessToken;
@@ -106,7 +106,7 @@ describe('Answer Test', () => {
       const password = await hashPassword('test123');
       const newUser = await createUser({ ...user, password });
       const response = await request(app)
-        .post('/auth/login')
+        .post('/api/v1/auth/login')
         .send(user)
         .set('Accept', 'application/json');
       token = response.body.accessToken;

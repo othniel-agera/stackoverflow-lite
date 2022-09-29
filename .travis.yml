@@ -1,0 +1,17 @@
+sudo: false
+
+language: node_js
+
+node_js:
+  - 17
+
+install: 
+  - npm ci
+
+script:
+  - npm run test:coveralls
+
+notifications:
+  email: false
+
+YARN_GPG=no
