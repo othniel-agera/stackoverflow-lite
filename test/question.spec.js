@@ -130,12 +130,6 @@ describe('Question Test', () => {
         .send(user)
         .set('Accept', 'application/json');
       token = response.body.accessToken;
-      const question = await postRequest('/questions', token)
-        .send({
-          question_text: 'question',
-        })
-        .expect(200);
-      question_id = question.body.question.id;
     });
     it('Should not post a new question with empty question_text', async () => {
       const response = await postRequest('/questions', token)
