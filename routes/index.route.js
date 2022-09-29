@@ -7,7 +7,6 @@ const answerRoute = require('./answer.route');
 const questionCommentRoute = require('./question_comment.route');
 const answerCommentRoute = require('./answer_comment.route');
 
-// Add /api
 router.use('/auth', userRoute);
 router.use('/questions', questionRoute);
 router.use('/questions/:question_id/answers', answerRoute);
