@@ -56,6 +56,7 @@ const postAnswer = async (req, res) => {
     const rawData = body;
     const filteredValues = filterValues(rawData, ['answer_text']);
     const data = formatValues(filteredValues);
+    if (!data.answer_text) return res.status(400).json({ message: 'Answer text is required' });
     const answer = await createAnswer({
       answer_text: data.answer_text,
       user_id,
@@ -87,7 +88,7 @@ const putAnswer = async (req, res) => {
       answer.save();
 
       return res.status(200).send({
-        message: 'Successfully posted answer',
+        message: 'Successfully edited answer',
         answer,
       });
     }
@@ -181,11 +182,16 @@ const selectPreferedAnswer = async (req, res) => {
 
 const deleteAnswer = async (req, res) => {
   try {
-    const { id } = req.params;
-    await destroyAnswer(id);
-    return res.status(200).send({
-      message: 'Successfully deleted answer',
-    });
+    const { params, user_id } = req;
+    const { id } = params;
+    const deleted = await destroyAnswer(id, user_id);
+
+    if (deleted) {
+      return res.status(200).send({
+        message: 'Successfully deleted answer',
+      });
+    }
+    return res.status(404).send({ message: 'No answer with such ID' });
   } catch (error) {
     return res.status(500).send({ error: error.message || error });
   }
