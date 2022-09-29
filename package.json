@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "server.js",
-    "test": "NODE_ENV=test nyc mocha --watch --recursive",
+    "test": "NODE_ENV=test nyc mocha",
     "test:coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
