@@ -47,11 +47,12 @@ const getQuestionsBySearchQuery = async (req, res) => {
   try {
     const { params, query } = req;
     const { search_query: search } = params;
-    const { page, limit } = query;
+    const page = Number.parseInt(query.page, 10);
+    const limit = Number.parseInt(query.limit, 10);
     const {
       rows,
       count,
-    } = await searchQuestions(search, true, Number.parseInt(page, 10), Number.parseInt(limit, 10));
+    } = await searchQuestions(search, true, page, limit);
 
     return res.status(200).send({
       message: 'Successfully got questions.',
@@ -177,8 +178,9 @@ const postVoteOnQuestion = async (req, res) => {
 
 const deleteQuestion = async (req, res) => {
   try {
-    const { id } = req.params;
-    const deleted = await destroyQuestion(id);
+    const { params, user_id } = req;
+    const { id } = params;
+    const deleted = await destroyQuestion(id, user_id);
 
     if (deleted) {
       return res.status(200).send({
