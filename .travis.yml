@@ -10,3 +10,8 @@ install:
 
 script:
   - npm run test:coveralls
+
+notifications:
+  email: false
+
+YARN_GPG=no
