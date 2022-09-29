@@ -1,24 +1,13 @@
-const { app, expect, request } = require('./common.spec');
+const {
+  app, expect, request,
+  getRequest,
+  postRequest,
+  putRequest,
+  deleteRequest,
+} = require('./common.spec');
 const { fetchQuestion, fetchQuestions, fetchQuestionsWithMostAnswers } = require('../lib/question.lib');
 const { createUser, fetchUser, destroyUser } = require('../lib/user.lib');
 const { hashPassword } = require('../lib/utility.lib');
-
-const getRequest = (route, token) => request(app)
-  .get(route)
-  .set('Authorization', token)
-  .set('Accept', 'application/json');
-const postRequest = (route, token) => request(app)
-  .post(route)
-  .set('Authorization', token)
-  .set('Accept', 'application/json');
-const putRequest = (route, token) => request(app)
-  .put(route)
-  .set('Authorization', token)
-  .set('Accept', 'application/json');
-const deleteRequest = (route, token) => request(app)
-  .delete(route)
-  .set('Authorization', token)
-  .set('Accept', 'application/json');
 
 describe('Question Test', () => {
   describe('Positive Tests', () => {
@@ -159,7 +148,7 @@ describe('Question Test', () => {
     });
     it('Should return no question', async () => {
       const search_query = await hashPassword('test123');
-      const response = await getRequest(`/questions/search/${search_query}?page=0&limit=10`, token).expect(200);
+      const response = await getRequest(`/questions/search/${search_query.slice(1, 10)}?page=0&limit=10`, token).expect(200);
 
       const resp_data = response.body;
       expect(resp_data).to.be.an('object');
