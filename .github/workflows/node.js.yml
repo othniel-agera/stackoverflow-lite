@@ -8,6 +8,16 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+env:
+  ## Sets environment variable
+  API_KEY: XXXXXXXXXXXX
+  DATABASE: stackoverflow_lite
+  DATABASE_URL: mysql://beb4a8c5b514b0:e7f555d2@us-cdbr-east-06.cleardb.net/heroku_4e49e7e07457860?reconnect=true
+  DB_HOST: us-cdbr-east-06.cleardb.net
+  DB_PASSWORD: e7f555d2
+  DB_USERNAME: beb4a8c5b514b0
+  SESSION_SECRET: eewsldd
+  TEST_DATABASE: heroku_4e49e7e07457860
 
 jobs:
   build:
